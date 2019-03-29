@@ -29,6 +29,8 @@ const entra_tela_roubar_btn = $('#menu-robbery')
 const roubar_btn = document.querySelector('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > button');
 
 const roubar = function() {
+	entra_tela_roubar_btn.click()
+	
 	$('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').attr('selected', false);
 	$('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select > option:nth-child(2)').attr('selected', true)
 
@@ -39,8 +41,6 @@ const roubar = function() {
 		$('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').attr('selected', false);
 		$('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select > option:nth-child(2)').attr('selected', true)
 	}
-
-	entra_tela_roubar_btn.click()
 	
 	setTimeout(function(){
 		roubar_btn.click();
