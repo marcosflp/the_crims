@@ -61,15 +61,11 @@ const curar_vicio = async function(){
 // Puteiro
 
 const pegar_uma_puta = async function(){
-	await wait(TIMEOUT)
-	const perfil = get_perfil();
-	if (perfil.estamina >= 10) {
-		return false;
-	}
-
-	// Entra página vida noturna
-	window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
 	await wait(TIMEOUT);
+	let perfil = get_perfil();
+
+	window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
+	await wait(TIMEOUT*1.5);
 
 	if (perfil.tickets === 0) {
 		console.log('Acabou Tickets');
@@ -83,9 +79,23 @@ const pegar_uma_puta = async function(){
 	entra_puteiro_btn.click();
 	await wait(TIMEOUT);
 
-	const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-	pegar_puta_btn.click();
-	await wait(TIMEOUT);
+	const darumazinha = async function(){
+		const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+		pegar_puta_btn.click();
+		await wait(TIMEOUT);	
+	}
+	let estamina_a_ganhar;
+	while(true) {
+		await wait(TIMEOUT);
+		perfil = get_perfil();
+		estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
+
+		if (estamina_a_ganhar && perfil.estamina+estamina_a_ganhar > 100) {
+			break;
+		} else{
+			await darumazinha();
+		}
+	}
 
 	return true;
 }
@@ -101,7 +111,7 @@ const roubar = async function() {
 
 	// Seleciona o que roubar e rouba
 
-	const perfil = get_perfil();
+	let perfil = get_perfil();
 	const roubar_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > button');
 	const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
 	const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
@@ -134,21 +144,17 @@ const roubar = async function() {
 			probabilidade_sucesso = parseInt(probabilidade_sucesso_regex[1].replace('%', ''));
 		}
 
-		if (!custo_estamina || !probabilidade_sucesso) {
-			// sem estamina
-			return false;
-		}
-
-		if (probabilidade_sucesso >= PROBABILIDADE_SUCESSO && perfil.estamina >= custo_estamina) {
+		if (custo_estamina && perfil.estamina >= custo_estamina && probabilidade_sucesso >= PROBABILIDADE_SUCESSO) {
 			select.val($(roubo_opcoes_reversed[i]).val())
 			select[0].dispatchEvent(new Event("change"));
 
-			await wait(200);
+			await wait(TIMEOUT);
 			roubar_btn.click();
 			return true;
 		}
 	}
 
+	// sem estamina
 	return false;
 }
 
