@@ -3,175 +3,174 @@ PROBABILIDADE_SUCESSO = 98  // %
 
 
 const wait = function(ms){
-	return new Promise(function(resolve, reject){
-		setTimeout(resolve, ms)
-	});
+  return new Promise(function(resolve, reject){
+    setTimeout(resolve, ms)
+  });
 };
 
 
 let get_perfil = function() {
-	class Perfil {
-		estamina = null;
-		respeito = null;
-		vicio = null;
-		tickets = null;
+  class Perfil {
+    estamina = null;
+    respeito = null;
+    vicio = null;
+    tickets = null;
 
-		constructor() {
-			this.get_estamina();
-			this.get_respeito();
-			this.get_vicio();
-			this.get_tickets();
-		}
+    constructor() {
+      this.get_estamina();
+      this.get_respeito();
+      this.get_vicio();
+      this.get_tickets();
+    }
 
-		get_estamina(){
-			this.estamina = parseFloat($('#user-profile-stamina').text().match(/\d+/));
-		}
+    get_estamina(){
+      this.estamina = parseFloat($('#user-profile-stamina').text().match(/\d+/));
+    }
 
-		get_respeito(){
-			self.respeito = parseInt($('#user-profile-info > div:nth-child(4) > span').text());
-		}
+    get_respeito(){
+      self.respeito = parseInt($('#user-profile-info > div:nth-child(4) > span').text());
+    }
 
-		get_vicio(){
-			this.vicio = parseInt($('#user-profile-addiction').text().match(/\d+/)[0]);
-		}
+    get_vicio(){
+      this.vicio = parseInt($('#user-profile-addiction').text().match(/\d+/)[0]);
+    }
 
-		get_tickets(){
-			this.tickets = parseInt($('#user-profile-info > div:nth-child(5) > span').text());
-		}
-	};
+    get_tickets(){
+      this.tickets = parseInt($('#user-profile-info > div:nth-child(5) > span').text());
+    }
+  };
 
-	return new Perfil();
+  return new Perfil();
 }
 
 
 // Hospital
 
 const curar_vicio = async function(){
-	await wait(TIMEOUT/200);
-	window.location = 'https://www.thecrims.com/newspaper#/hospital';
-	await wait(TIMEOUT);
+  await wait(TIMEOUT/200);
+  window.location = 'https://www.thecrims.com/newspaper#/hospital';
+  await wait(TIMEOUT);
 
-	const desintoxicar_btn = $('#content_middle > div > div:nth-child(3) > table:nth-child(5) > tr > td:nth-child(2) > button.btn.btn-small.btn-inverse.pull-left');
-	desintoxicar_btn.click();
+  const desintoxicar_btn = $('#content_middle > div > div:nth-child(3) > table:nth-child(5) > tr > td:nth-child(2) > button.btn.btn-small.btn-inverse.pull-left');
+  desintoxicar_btn.click();
 
-	return true;
+  return true;
 }
 
 
 // Puteiro
 
 const pegar_uma_puta = async function(){
-	await wait(TIMEOUT);
-	let perfil = get_perfil();
+  await wait(TIMEOUT);
+  let perfil = get_perfil();
 
-	window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
-	await wait(TIMEOUT*1.5);
+  window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
+  await wait(TIMEOUT*1.5);
 
-	if (perfil.tickets === 0) {
-		console.log('Acabou Tickets');
-		return null;
-	}
+  if (perfil.tickets === 0) {
+    console.log('Acabou Tickets');
+    return null;
+  }
 
-	let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr > td:nth-child(5) > div > button');
-	if (!entra_puteiro_btn.length) {
-		entra_puteiro_btn = $('##content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
-	}
-	entra_puteiro_btn.click();
-	await wait(TIMEOUT);
+  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr > td:nth-child(5) > div > button');
+  if (!entra_puteiro_btn.length) {
+    entra_puteiro_btn = $('##content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
+  }
+  entra_puteiro_btn.click();
+  await wait(TIMEOUT);
 
-	const darumazinha = async function(){
-		const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-		pegar_puta_btn.click();
-		await wait(TIMEOUT);	
-	}
-	let estamina_a_ganhar;
-	while(true) {
-		await wait(TIMEOUT);
-		perfil = get_perfil();
-		estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
+  const darumazinha = async function(){
+    const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+    pegar_puta_btn.click();
+    await wait(TIMEOUT);  
+  }
+  let estamina_a_ganhar;
+  while(true) {
+    perfil = get_perfil();
+    estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
 
-		if (estamina_a_ganhar && perfil.estamina+estamina_a_ganhar > 100) {
-			break;
-		} else{
-			await darumazinha();
-		}
-	}
+    if (estamina_a_ganhar && perfil.estamina+estamina_a_ganhar > 100) {
+      break;
+    } else{
+      await darumazinha();
+    }
+  }
 
-	return true;
+  return true;
 }
 
 
 // Roubar
 
 const roubar = async function() {
-	// Entra página Roubar
-	const entra_tela_roubar_btn = $('#menu-robbery');
-	entra_tela_roubar_btn.click();
-	await wait(TIMEOUT);
+  // Entra página Roubar
+  const entra_tela_roubar_btn = $('#menu-robbery');
+  entra_tela_roubar_btn.click();
+  await wait(TIMEOUT);
 
-	// Seleciona o que roubar e rouba
+  // Seleciona o que roubar e rouba
 
-	let perfil = get_perfil();
-	const roubar_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > button');
-	const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
-	const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
-	const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
-	const option_selected = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option[value=' + select.val() + ']')
-	
-	if (perfil.estamina >= 50) {
-		const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
-		if (aceitar_convite_grupo_btn.css('display') != 'none') {
-			aceitar_convite_grupo_btn.click();
-		}
+  let perfil = get_perfil();
+  const roubar_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > button');
+  const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
+  const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
+  const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
+  const option_selected = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option[value=' + select.val() + ']')
+  
+  if (perfil.estamina >= 50) {
+    const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
+    if (aceitar_convite_grupo_btn.css('display') != 'none') {
+      aceitar_convite_grupo_btn.click();
+    }
 
-		const efetuar_roubro_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-inverse.btn-small');
-		if (efetuar_roubro_grupo_btn.css('display') != 'none') {
-			efetuar_roubro_grupo_btn.click();
-		}
-		await wait(TIMEOUT/2);
-	}
+    const efetuar_roubro_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-inverse.btn-small');
+    if (efetuar_roubro_grupo_btn.css('display') != 'none') {
+      efetuar_roubro_grupo_btn.click();
+    }
+    await wait(TIMEOUT/2);
+  }
 
-	for (let i=0; i < roubo_opcoes_reversed.length; i++){
-		const custo_estamina_regex = roubo_opcoes_reversed[i].innerText.match(/\d+%/g);
-		let custo_estamina;
-		if (custo_estamina_regex) {
-			custo_estamina = parseInt(custo_estamina_regex[0].replace('%', ''))
-		}
+  for (let i=0; i < roubo_opcoes_reversed.length; i++){
+    const custo_estamina_regex = roubo_opcoes_reversed[i].innerText.match(/\d+%/g);
+    let custo_estamina;
+    if (custo_estamina_regex) {
+      custo_estamina = parseInt(custo_estamina_regex[0].replace('%', ''))
+    }
 
-		const probabilidade_sucesso_regex = roubo_opcoes_reversed[i].innerText.match(/\d+%/g);
-		let probabilidade_sucesso;
-		if (probabilidade_sucesso_regex) {
-			probabilidade_sucesso = parseInt(probabilidade_sucesso_regex[1].replace('%', ''));
-		}
+    const probabilidade_sucesso_regex = roubo_opcoes_reversed[i].innerText.match(/\d+%/g);
+    let probabilidade_sucesso;
+    if (probabilidade_sucesso_regex) {
+      probabilidade_sucesso = parseInt(probabilidade_sucesso_regex[1].replace('%', ''));
+    }
 
-		if (custo_estamina && perfil.estamina >= custo_estamina && probabilidade_sucesso >= PROBABILIDADE_SUCESSO) {
-			select.val($(roubo_opcoes_reversed[i]).val())
-			select[0].dispatchEvent(new Event("change"));
+    if (custo_estamina && perfil.estamina >= custo_estamina && probabilidade_sucesso >= PROBABILIDADE_SUCESSO) {
+      select.val($(roubo_opcoes_reversed[i]).val())
+      select[0].dispatchEvent(new Event("change"));
 
-			await wait(TIMEOUT);
-			roubar_btn.click();
-			return true;
-		}
-	}
+      await wait(TIMEOUT);
+      roubar_btn.click();
+      return true;
+    }
+  }
 
-	// sem estamina
-	return false;
+  // sem estamina
+  return false;
 }
 
 
 const roubar_e_pegar_putas_loop = async function() {
-	const perfil = get_perfil();
+  const perfil = get_perfil();
 
-	if (perfil.vicio >= 90){
-		await curar_vicio();
-	}
+  if (perfil.vicio >= 90){
+    await curar_vicio();
+  }
 
-	roubo = await roubar();
-	if (roubo) {
-		return roubar_e_pegar_putas_loop();
-	} else {
-		await pegar_uma_puta();
-		return roubar_e_pegar_putas_loop();
-	}
+  roubo = await roubar();
+  if (roubo) {
+    return roubar_e_pegar_putas_loop();
+  } else {
+    await pegar_uma_puta();
+    return roubar_e_pegar_putas_loop();
+  }
 }
 roubar_e_pegar_putas_loop()
