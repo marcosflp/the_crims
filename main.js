@@ -1,5 +1,5 @@
 TIMEOUT = 1000  // ms
-PROBABILIDADE_SUCESSO = 70  // %
+PROBABILIDADE_SUCESSO = 100  // %
 
 
 const wait = function(ms){
@@ -71,35 +71,37 @@ const pegar_uma_puta = async function(){
     console.log('Acabou Tickets');
     return null;
   }
+  if (perfil.estamina < 10 && verifica_estamina() < 10) {
+      let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
+      if (!entra_puteiro_btn.length) {
+          entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
+      }
+      entra_puteiro_btn.click();
+      await wait(TIMEOUT);
 
-  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
-  if (!entra_puteiro_btn.length) {
-    entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
-  }
-  entra_puteiro_btn.click();
-  await wait(TIMEOUT);
+        const darumazinha = async function () {
+            await wait(TIMEOUT);
+            const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+            pegar_puta_btn.click();
+            await wait(TIMEOUT);
+        };
 
-  const darumazinha = async function(){
-    await wait(TIMEOUT);
-    const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-    pegar_puta_btn.click();
-    await wait(TIMEOUT);
-  }
+        while (true) {
+            await wait(TIMEOUT);
+            perfil = get_perfil();
+            estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
 
-  while(true) {
-  	await wait(TIMEOUT);
-    perfil = get_perfil();
-    estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
+            if (perfil.estamina + estamina_a_ganhar <= 110 && verifica_estamina() + estamina_a_ganhar <= 110) {
+              await darumazinha();
+            } else {
+              break;
+            }
 
-    if (perfil.estamina+estamina_a_ganhar <= 110 && verifica_estamina()+estamina_a_ganhar <= 110) {
-      await darumazinha();
-    } else{
-      break;
-    }
+        }
   }
 
   return true;
-}
+};
 
 
 // Roubar
