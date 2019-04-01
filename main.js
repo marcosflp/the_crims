@@ -163,7 +163,7 @@ const roubar = async function() {
 const roubar_e_pegar_putas_loop = async function() {
   const perfil = get_perfil();
 
-  if (perfil.vicio >= 90){
+  if (perfil.vicio >= 10){
     await curar_vicio();
   }
 
