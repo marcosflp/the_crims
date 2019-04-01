@@ -1,5 +1,6 @@
 TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
+ROUBAR_EM_GRUPO = false
 
 
 const wait = function(ms){
@@ -110,7 +111,7 @@ const roubar = async function() {
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
   const option_selected = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option[value=' + select.val() + ']')
 
-  if (perfil.estamina >= 50) {
+  if (ROUBAR_EM_GRUPO && perfil.estamina >= 50) {
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
       aceitar_convite_grupo_btn.click();
