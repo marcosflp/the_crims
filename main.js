@@ -1,5 +1,5 @@
 TIMEOUT = 1000  // ms
-PROBABILIDADE_SUCESSO = 98  // %
+PROBABILIDADE_SUCESSO = 70  // %
 
 
 const wait = function(ms){
@@ -61,35 +61,36 @@ const curar_vicio = async function(){
 // Puteiro
 
 const pegar_uma_puta = async function(){
-  await wait(TIMEOUT);
-  let perfil = get_perfil();
-
   window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
   await wait(TIMEOUT*1.5);
+
+  let perfil = get_perfil();
+  let estamina_a_ganhar;
 
   if (perfil.tickets === 0) {
     console.log('Acabou Tickets');
     return null;
   }
 
-  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr > td:nth-child(5) > div > button');
+  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
   if (!entra_puteiro_btn.length) {
-    entra_puteiro_btn = $('##content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
+    entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
   }
   entra_puteiro_btn.click();
   await wait(TIMEOUT);
 
   const darumazinha = async function(){
+    await wait(TIMEOUT);  
     const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
     pegar_puta_btn.click();
-    await wait(TIMEOUT);  
+    await wait(TIMEOUT);
   }
-  let estamina_a_ganhar;
+
   while(true) {
     perfil = get_perfil();
     estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
 
-    if (estamina_a_ganhar && perfil.estamina+estamina_a_ganhar > 100) {
+    if (perfil.estamina+estamina_a_ganhar > 100) {
       break;
     } else{
       await darumazinha();
