@@ -80,7 +80,7 @@ const pegar_uma_puta = async function(){
   await wait(TIMEOUT);
 
   const darumazinha = async function(){
-    await wait(TIMEOUT);  
+    await wait(TIMEOUT);
     const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
     pegar_puta_btn.click();
     await wait(TIMEOUT);
@@ -91,10 +91,10 @@ const pegar_uma_puta = async function(){
     perfil = get_perfil();
     estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
 
-    if (perfil.estamina+estamina_a_ganhar > 100) {
-      break;
-    } else{
+    if (perfil.estamina+estamina_a_ganhar <= 110 && verifica_estamina()+estamina_a_ganhar <= 110) {
       await darumazinha();
+    } else{
+      break;
     }
   }
 
@@ -118,7 +118,7 @@ const roubar = async function() {
   const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
   const option_selected = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option[value=' + select.val() + ']')
-  
+
   if (perfil.estamina >= 50) {
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
@@ -176,3 +176,7 @@ const roubar_e_pegar_putas_loop = async function() {
   }
 }
 roubar_e_pegar_putas_loop()
+
+function verifica_estamina() {
+    return parseFloat(document.querySelector('#stamina-progressbar').style.width)
+}
