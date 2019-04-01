@@ -1,4 +1,4 @@
-TIMEOUT = 2000  // ms
+TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
 
 
@@ -71,26 +71,27 @@ const pegar_uma_puta = async function(){
     return null;
   }
 
-  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
-  if (!entra_puteiro_btn.length) {
-    entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
-  }
-  if (!entra_puteiro_btn.length) {
-    throw 'Bot: Porra, não consegui achar o botão para entra no puteiro.';
-  }
-  entra_puteiro_btn[0].click();
-  await wait(TIMEOUT);
+  if (perfil.estamina < 10 && verifica_estamina() < 10) {
+    let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
+    if (!entra_puteiro_btn.length) {
+      entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
+    }
+    if (!entra_puteiro_btn.length) {
+      throw 'Bot: Porra, não consegui achar o botão para entra no puteiro.';
+    }
+    entra_puteiro_btn[0].click();
+    await wait(TIMEOUT);
 
-  const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-  if (!pegar_puta_btn.length) {
-    throw 'Bot: Porra, não consegui achar o botão para darumazinha.';
-  }
-  pegar_puta_btn[0].click();
-  await wait(TIMEOUT);
+    const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+    if (!pegar_puta_btn.length) {
+      throw 'Bot: Porra, não consegui achar o botão para darumazinha.';
+    }
+    pegar_puta_btn[0].click();
+    await wait(TIMEOUT);
 
-  return true;
+    return true;
+  };
 }
-
 
 // Roubar
 
