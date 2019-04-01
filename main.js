@@ -87,6 +87,7 @@ const pegar_uma_puta = async function(){
   }
 
   while(true) {
+  	await wait(TIMEOUT);
     perfil = get_perfil();
     estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
 
