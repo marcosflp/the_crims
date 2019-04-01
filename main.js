@@ -1,5 +1,5 @@
-TIMEOUT = 1000  // ms
-PROBABILIDADE_SUCESSO = 70  // %
+TIMEOUT = 2000  // ms
+PROBABILIDADE_SUCESSO = 100  // %
 
 
 const wait = function(ms){
@@ -65,7 +65,6 @@ const pegar_uma_puta = async function(){
   await wait(TIMEOUT*1.5);
 
   let perfil = get_perfil();
-  let estamina_a_ganhar;
 
   if (perfil.tickets === 0) {
     console.log('Acabou Tickets');
@@ -79,24 +78,9 @@ const pegar_uma_puta = async function(){
   entra_puteiro_btn.click();
   await wait(TIMEOUT);
 
-  const darumazinha = async function(){
-    await wait(TIMEOUT);  
-    const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-    pegar_puta_btn.click();
-    await wait(TIMEOUT);
-  }
-
-  while(true) {
-  	await wait(TIMEOUT);
-    perfil = get_perfil();
-    estamina_a_ganhar = parseInt($('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(2)').text());
-
-    if (perfil.estamina+estamina_a_ganhar > 100) {
-      break;
-    } else{
-      await darumazinha();
-    }
-  }
+  const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+  pegar_puta_btn.click();
+  await wait(TIMEOUT);
 
   return true;
 }
@@ -163,7 +147,7 @@ const roubar = async function() {
 const roubar_e_pegar_putas_loop = async function() {
   const perfil = get_perfil();
 
-  if (perfil.vicio >= 10){
+  if (perfil.vicio >= 5){
     await curar_vicio();
   }
 
