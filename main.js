@@ -1,6 +1,7 @@
 TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
 ROUBAR_EM_GRUPO = false
+ROUBAR_EM_GRUPO_CONVOCADOR = false;
 
 
 const wait = function(ms){
@@ -104,23 +105,51 @@ const roubar = async function() {
 
   // Seleciona o que roubar e rouba
 
-  let perfil = get_perfil();
   const roubar_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > button');
   const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
-  const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
+  const roubo_opcoes_reversed = roubo_opcoes.toArray().reverse();
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
+  let perfil = get_perfil();
 
-  if (ROUBAR_EM_GRUPO && perfil.estamina >= 50) {
+  if (ROUBAR_EM_GRUPO && perfil.estamina >= 25) {
+    const roubo_em_grupo_select = $('#content_middle > div > div:nth-child(3) > div:nth-child(6) > table > tr > td:nth-child(1) > select');
+    const roubo_em_grupo_options = $('#content_middle > div > div:nth-child(3) > div:nth-child(6) > table > tr > td:nth-child(1) > select option');
+    const roubo_em_grupo_options_reversed = roubo_em_grupo_options.toArray().reverse();
+    const convocar_gangue_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(6) > table > tr > td:nth-child(1) > button');
+
+    if (ROUBAR_EM_GRUPO_CONVOCADOR) {
+      const local_roubo = 'banco';
+      let local_roubo_option;
+
+      if (!convocar_gangue_btn.length) {
+
+      }
+      
+      for (let i=0; i < roubo_opcoes_reversed.length; i++) {
+        local_roubo_option = roubo_opcoes_reversed[i].innerText.trim().toLowerCase();
+        if (local_roubo_option === local_roubo) {
+          roubo_em_grupo_select.val($(roubo_em_grupo_options_reversed[i]).val())
+          select[0].dispatchEvent(new Event('change'));
+          await(TIMEOUT/2);
+
+          convocar_gangue_btn.click()
+        }
+      }
+    }
+
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
       aceitar_convite_grupo_btn.click();
+      await wait(TIMEOUT/2);
     }
 
     const efetuar_roubro_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-inverse.btn-small');
     if (efetuar_roubro_grupo_btn.css('display') != 'none') {
       efetuar_roubro_grupo_btn.click();
+      await wait(TIMEOUT/2);
     }
-    await wait(TIMEOUT/2);
+
+    return true;
   }
 
   for (let i=0; i < roubo_opcoes_reversed.length; i++){
@@ -138,7 +167,7 @@ const roubar = async function() {
 
     if (custo_estamina && perfil.estamina >= custo_estamina && probabilidade_sucesso >= PROBABILIDADE_SUCESSO) {
       select.val($(roubo_opcoes_reversed[i]).val())
-      select[0].dispatchEvent(new Event("change"));
+      select[0].dispatchEvent(new Event('change'));
 
       await wait(TIMEOUT);
       roubar_btn.click();
