@@ -62,7 +62,7 @@ const curar_vicio = async function(){
 // Puteiro
 
 const pegar_uma_puta = async function(){
-  window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
+
   await wait(TIMEOUT*1.5);
 
   let perfil = get_perfil();
@@ -86,6 +86,8 @@ const pegar_uma_puta = async function(){
     const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
     if (!pegar_puta_btn.length) {
       throw 'Bot: Porra, não consegui achar o botão para darumazinha.';
+      window.location = 'https://www.thecrims.com/newspaper#/nightlife';
+      await pegar_uma_puta();
     }
     pegar_puta_btn[0].click();
     await wait(TIMEOUT);
@@ -117,8 +119,11 @@ const roubar = async function() {
     }
 
     const efetuar_roubro_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-inverse.btn-small');
-    if (efetuar_roubro_grupo_btn.css('display') != 'none') {
+    const efetuar_roubo_solo_btn= $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > div > table > tr > td:nth-child(1) > button');
+    if (ROUBAR_EM_GRUPO && efetuar_roubro_grupo_btn.css('display') != 'none') {
       efetuar_roubro_grupo_btn.click();
+    } else {
+        efetuar_roubo_solo_btn.click();
     }
     await wait(TIMEOUT/2);
   }
@@ -162,6 +167,7 @@ const roubar_e_pegar_putas_loop = async function() {
   if (roubo) {
     return roubar_e_pegar_putas_loop();
   } else {
+    window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
     await pegar_uma_puta();
     return roubar_e_pegar_putas_loop();
   }
