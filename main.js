@@ -88,6 +88,7 @@ const pegar_uma_puta = async function(){
     if (!pegar_puta_btn.length) {
       window.location = 'https://www.thecrims.com/newspaper#/nightlife';
       await pegar_uma_puta();
+      return true;
     }
     pegar_puta_btn[0].click();
     await wait(TIMEOUT);
