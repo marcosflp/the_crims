@@ -1,6 +1,7 @@
 TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
 ROUBAR_EM_GRUPO = false
+ROUBER_EM_GRUPO_LIDER = false
 
 
 const wait = function(ms){
@@ -85,7 +86,6 @@ const pegar_uma_puta = async function(){
 
     const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
     if (!pegar_puta_btn.length) {
-      throw 'Bot: Porra, não consegui achar o botão para darumazinha.';
       window.location = 'https://www.thecrims.com/newspaper#/nightlife';
       await pegar_uma_puta();
     }
@@ -111,8 +111,14 @@ const roubar = async function() {
   const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
   const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
+  const select_grupo = document.querySelector('#gangrobbery-select-robbery');
 
-  if (ROUBAR_EM_GRUPO && perfil.estamina >= 50) {
+  if (ROUBAR_EM_GRUPO && perfil.estamina >= 25) {
+    if (ROUBER_EM_GRUPO_LIDER) {
+      const convocar_grupo_btn = document.querySelector('#gangrobbery-plan');
+      select_grupo.value = 1;
+      convocar_grupo_btn.click();
+    }
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
       aceitar_convite_grupo_btn.click();
