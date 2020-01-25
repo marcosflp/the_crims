@@ -1,6 +1,7 @@
 TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
-ROUBAR_EM_GRUPO = true
+ROUBAR_EM_GRUPO = false
+ROUBER_EM_GRUPO_LIDER = false
 
 
 const wait = function(ms){
@@ -68,6 +69,7 @@ const pegar_uma_puta = async function(){
 
   const entra_aba_puteiros_btn = $('#content_middle > div > div:nth-child(3) > ul > li:nth-child(2) > a');
   entra_aba_puteiros_btn[0].dispatchEvent(new Event('click'))
+
   await wait(TIMEOUT*1.5);
 
   let perfil = get_perfil();
@@ -118,16 +120,25 @@ const roubar = async function() {
   const roubo_opcoes = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option');
   const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
+  const select_grupo = document.querySelector('#gangrobbery-select-robbery');
 
   if (ROUBAR_EM_GRUPO && perfil.estamina >= 25) {
+    if (ROUBER_EM_GRUPO_LIDER) {
+      const convocar_grupo_btn = document.querySelector('#gangrobbery-plan');
+      select_grupo.value = 1;
+      convocar_grupo_btn.click();
+    }
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
       aceitar_convite_grupo_btn.click();
     }
 
     const efetuar_roubro_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-inverse.btn-small');
-    if (efetuar_roubro_grupo_btn.css('display') != 'none') {
+    const efetuar_roubo_solo_btn= $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > div > table > tr > td:nth-child(1) > button');
+    if (ROUBAR_EM_GRUPO && efetuar_roubro_grupo_btn.css('display') != 'none') {
       efetuar_roubro_grupo_btn.click();
+    } else {
+        efetuar_roubo_solo_btn.click();
     }
     await wait(TIMEOUT/2);
 
@@ -173,6 +184,7 @@ const roubar_e_pegar_putas_loop = async function() {
   if (roubo) {
     return roubar_e_pegar_putas_loop();
   } else {
+    window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
     await pegar_uma_puta();
     return roubar_e_pegar_putas_loop();
   }
