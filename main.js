@@ -1,6 +1,6 @@
 TIMEOUT = 1000  // ms
 PROBABILIDADE_SUCESSO = 100  // %
-ROUBAR_EM_GRUPO = false
+ROUBAR_EM_GRUPO = true
 
 
 const wait = function(ms){
@@ -49,7 +49,7 @@ let get_perfil = function() {
 
 const curar_vicio = async function(){
   await wait(TIMEOUT/200);
-  window.location = 'https://www.thecrims.com/newspaper#/hospital';
+  $('#menu-hospital').click()
   await wait(TIMEOUT);
 
   const desintoxicar_btn = $('#content_middle > div > div:nth-child(3) > table:nth-child(5) > tr > td:nth-child(2) > button.btn.btn-small.btn-inverse.pull-left');
@@ -62,36 +62,45 @@ const curar_vicio = async function(){
 // Puteiro
 
 const pegar_uma_puta = async function(){
-  window.location = 'https://www.thecrims.com/newspaper#/nightlife/whorehouses';
+  const entra_tela_vida_noturna_btn = $('#content_left > ul > li:nth-child(3)');
+  entra_tela_vida_noturna_btn.click()
+  await wait(TIMEOUT*1.5)
+
+  const entra_aba_puteiros_btn = $('#content_middle > div > div:nth-child(3) > ul > li:nth-child(2) > a');
+  entra_aba_puteiros_btn[0].dispatchEvent(new Event('click'))
   await wait(TIMEOUT*1.5);
 
   let perfil = get_perfil();
 
   if (perfil.tickets === 0) {
-    console.log('Acabou Tickets');
+    console.warn('Acabou Tickets');
+    return null;
+  }
+  if (perfil.estamina > 10 && verifica_estamina() > 10) {
+    console.warn('Estamina alta para darumzainha');
     return null;
   }
 
-  if (perfil.estamina < 10 && verifica_estamina() < 10) {
-    let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
-    if (!entra_puteiro_btn.length) {
-      entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
-    }
-    if (!entra_puteiro_btn.length) {
-      throw 'Bot: Porra, não consegui achar o botão para entra no puteiro.';
-    }
-    entra_puteiro_btn[0].click();
-    await wait(TIMEOUT);
+  let entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(5) > div > button');
+  if (!entra_puteiro_btn.length) {
+    entra_puteiro_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > ul > li:nth-child(1) > table > tbody > tr:nth-child(3) > td:nth-child(2) > div > button');
+  }
+  if (!entra_puteiro_btn.length) {
+    console.error('Bot: Porra, não consegui achar o botão para entra no puteiro.');
+    return pegar_uma_puta();
+  }
+  entra_puteiro_btn[0].click();
+  await wait(TIMEOUT);
 
-    const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
-    if (!pegar_puta_btn.length) {
-      throw 'Bot: Porra, não consegui achar o botão para darumazinha.';
-    }
-    pegar_puta_btn[0].click();
-    await wait(TIMEOUT);
+  const pegar_puta_btn = $('#content_middle > div > div:nth-child(3) > table.table.table-condensed.table-top-spacing > tbody > tr > td:nth-child(4) > button');
+  if (!pegar_puta_btn.length) {
+    console.error('Bot: Porra, não consegui achar o botão para darumazinha.');
+    return pegar_uma_puta();
+  }
+  pegar_puta_btn[0].click();
+  await wait(TIMEOUT);
 
-    return true;
-  };
+  return true;
 }
 
 // Roubar
@@ -110,7 +119,7 @@ const roubar = async function() {
   const roubo_opcoes_reversed = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select option').toArray().reverse();
   const select = $('#content_middle > div > div:nth-child(3) > div:nth-child(5) > div > table > tr > td:nth-child(1) > select');
 
-  if (ROUBAR_EM_GRUPO && perfil.estamina >= 50) {
+  if (ROUBAR_EM_GRUPO && perfil.estamina >= 25) {
     const aceitar_convite_grupo_btn = $('#content_middle > div > div:nth-child(3) > div:nth-child(7) > div > div.text-center > button.btn.btn-success.btn-small');
     if (aceitar_convite_grupo_btn.css('display') != 'none') {
       aceitar_convite_grupo_btn.click();
@@ -121,6 +130,8 @@ const roubar = async function() {
       efetuar_roubro_grupo_btn.click();
     }
     await wait(TIMEOUT/2);
+
+    return true;
   }
 
   for (let i=0; i < roubo_opcoes_reversed.length; i++){
